@@ -11,5 +11,5 @@
 | # | 질문 | 상태 | 관련 |
 |---|------|------|------|
 | [q01](q01-backbone-freeze.md) | 백본 얼림(freeze)이 무슨 뜻? | ✅ 정리됨 | exp01, `train.py` |
-| [q02](q02-why-test-acc-higher.md) | 왜 test_acc가 train_acc보다 높지? (보통은 반대인데) | 🤔 스스로 생각해보기 | exp01 학습 곡선 |
-| [q03](q03-full-finetune-low-lr.md) | 전체 파인튜닝은 왜 학습률을 10배 낮추나? | 🤔 스스로 생각해보기 | exp02 (예정) |
+| [q02](q02-why-test-acc-higher.md) | 왜 test_acc가 train_acc보다 높지? (보통은 반대인데) | 🤔 스스로 생각해보기 · 해설 있음 | exp01 학습 곡선 |
+| [q03](q03-full-finetune-low-lr.md) | 전체 파인튜닝은 왜 학습률을 10배 낮추나? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 (예정) |
