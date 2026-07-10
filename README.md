@@ -46,7 +46,7 @@ python scripts/download_data.py
 ```
 scripts/    데이터 다운로드 등 유틸리티
 src/        Dataset, 학습/평가 코드, metrics_logger.py
-notes/      질문 중심 공부 노트 (질문 1개 = 파일 1개)
+notes/      챕터별 공부 노트 (chN/ 안에 개념 사전·학습 노트·질문 노트)
 notebooks/  실험·분석 노트북 (Grad-CAM 시각화 등)
 docs/       GitHub Pages 대시보드 + 실험 지표(JSON)
 data/       데이터셋 (git 제외)
