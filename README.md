@@ -33,19 +33,37 @@ python scripts/download_data.py
 
 ```
 scripts/    데이터 다운로드 등 유틸리티
-src/        Dataset, 학습/평가 코드
+src/        Dataset, 학습/평가 코드, metrics_logger.py
 notebooks/  실험·분석 노트북 (Grad-CAM 시각화 등)
+docs/       GitHub Pages 대시보드 + 실험 지표(JSON)
 data/       데이터셋 (git 제외)
 checkpoints/ 학습된 가중치 (git 제외)
 ```
+
+## 실험 대시보드
+
+**📊 https://hakhyun-kim.github.io/LLMLearning/** — 실험별 학습 곡선을 겹쳐 보는 대시보드 (GitHub Pages)
+
+학습 코드에서 로거를 쓰면 자동으로 기록되고, `git push` 하면 1~2분 안에 대시보드가 갱신됩니다:
+
+```python
+from metrics_logger import MetricsLogger
+
+logger = MetricsLogger("exp01_baseline", config={"lr": 1e-3, "batch_size": 32})
+for epoch in range(num_epochs):
+    # ...학습...
+    logger.log(train_loss=train_loss, train_acc=train_acc, test_acc=test_acc)
+```
+
+- 실험 삭제: `python src/metrics_logger.py remove <실험명>`
+- 로컬에서 대시보드 미리보기: `python -m http.server 8321 --directory docs` → http://localhost:8321
+- 지금 들어있는 `demo1_*`, `demo2_*` 는 데모 데이터 — 실제 실험을 시작하면 지우면 됩니다.
 
 ## 실험 기록
 
 | # | 설정 | Test Acc | 메모 |
 |---|------|----------|------|
 | 1 | (예정) fc층만 학습 베이스라인 | - | - |
-
-wandb 대시보드: (추가 예정)
 
 ## 학습 로드맵
 

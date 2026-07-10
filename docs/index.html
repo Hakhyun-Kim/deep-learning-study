@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stanford 40 학습 대시보드</title>
+<style>
+  :root {
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink-1: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11, 11, 11, 0.10);
+    --goal-ink: #006300;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink-1: #ffffff;
+      --ink-2: #c3c2b7;
+      --ink-muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255, 255, 255, 0.10);
+      --goal-ink: #0ca30c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink-1);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 48px; }
+  header h1 { font-size: 20px; margin: 0 0 4px; }
+  header .sub { color: var(--ink-2); font-size: 13px; }
+  .goal-badge { color: var(--goal-ink); font-weight: 600; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .card h2 { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 0 0 10px; }
+  .card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .card-head label { font-size: 12px; color: var(--ink-2); cursor: pointer; user-select: none; }
+  .plot { position: relative; height: 320px; }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0; }
+  .charts .card { margin-top: 16px; }
+  @media (max-width: 860px) { .charts { grid-template-columns: 1fr; } }
+
+  /* 실험 목록 = 범례 */
+  #exp-list { display: flex; flex-direction: column; gap: 6px; }
+  .exp-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 8px; border-radius: 8px; cursor: pointer; user-select: none;
+  }
+  .exp-row:hover { background: var(--page); }
+  .exp-row input { accent-color: var(--ink-2); }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+  .exp-name { font-weight: 600; }
+  .exp-chips { color: var(--ink-muted); font-size: 12px; }
+  .exp-best { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--ink-2); font-size: 12px; white-space: nowrap; }
+  .exp-row.off { opacity: 0.45; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--grid); }
+  th { color: var(--ink-muted); font-weight: 500; font-size: 12px; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: none; }
+
+  footer { margin-top: 20px; color: var(--ink-muted); font-size: 12px; }
+  footer code { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; }
+  #empty { color: var(--ink-2); }
+  #empty code { display: block; white-space: pre; background: var(--page); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-top: 10px; overflow-x: auto; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Stanford 40 Actions — 학습 실험 대시보드</h1>
+    <div class="sub">ResNet18 파인튜닝 · <span class="goal-badge">목표: 테스트 정확도 80%</span> · <span id="updated"></span></div>
+  </header>
+
+  <section class="card" id="exp-card">
+    <h2>실험 (클릭해서 켜고 끄기)</h2>
+    <div id="exp-list"></div>
+    <div id="empty" hidden>
+      아직 기록된 실험이 없습니다. 학습 코드에서 로거를 쓰고 push 하면 여기에 그래프가 나타납니다:
+      <code>from metrics_logger import MetricsLogger
+
+logger = MetricsLogger("exp01_baseline", config={"lr": 1e-3})
+logger.log(train_loss=0.5, train_acc=0.8, test_acc=0.7)  # 에폭마다</code>
+    </div>
+  </section>
+
+  <section class="charts">
+    <div class="card">
+      <div class="card-head">
+        <h2>테스트 정확도 (%)</h2>
+        <label><input type="checkbox" id="show-train"> train 정확도 겹쳐 보기 (점선)</label>
+      </div>
+      <div class="plot"><canvas id="acc-chart" role="img" aria-label="에폭별 테스트 정확도 선 그래프"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>학습 손실 (train loss)</h2></div>
+      <div class="plot"><canvas id="loss-chart" role="img" aria-label="에폭별 학습 손실 선 그래프"></canvas></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>실험 요약</h2>
+    <div style="overflow-x:auto">
+      <table id="summary">
+        <thead><tr>
+          <th>실험</th><th class="num">에폭</th><th class="num">최고 test acc</th>
+          <th class="num">최종 test acc</th><th class="num">최종 train acc</th><th>설정</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    학습 후 <code>git push</code> 하면 1~2분 안에 이 페이지가 갱신됩니다.
+    데이터: <code>docs/metrics/*.json</code> · 기록: <code>src/metrics_logger.py</code>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<script>
+(() => {
+  const LIGHT = ['#2a78d6','#1baf7a','#eda100','#008300','#4a3aa7','#e34948','#e87ba4','#eb6834'];
+  const DARK  = ['#3987e5','#199e70','#c98500','#008300','#9085e9','#e66767','#d55181','#d95926'];
+  const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const state = { runs: [], visible: new Set(), showTrain: false };
+  let accChart = null, lossChart = null;
+
+  const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const palette = () => (darkMq.matches ? DARK : LIGHT);
+  const color = i => palette()[i % palette().length];
+  const pct = v => (v * 100);
+  const fmtPct = v => v == null ? '–' : (v * 100).toFixed(1) + '%';
+  const last = arr => (arr && arr.length ? arr[arr.length - 1] : null);
+  const best = arr => (arr && arr.length ? Math.max(...arr) : null);
+
+  async function loadAll() {
+    let manifest;
+    try {
+      manifest = await (await fetch('metrics/manifest.json', { cache: 'no-store' })).json();
+    } catch { manifest = { experiments: [] }; }
+    const runs = [];
+    for (const name of manifest.experiments || []) {
+      try {
+        const r = await fetch(`metrics/${name}.json`, { cache: 'no-store' });
+        if (r.ok) runs.push(await r.json());
+      } catch { /* 파일이 없으면 건너뜀 */ }
+    }
+    state.runs = runs;
+    runs.forEach((_, i) => state.visible.add(i));
+  }
+
+  // ── 80% 목표선 ──────────────────────────────────────────────
+  const targetLine = {
+    id: 'targetLine',
+    afterDatasetsDraw(chart, _args, opts) {
+      if (!opts.value) return;
+      const { ctx, chartArea, scales } = chart;
+      const y = scales.y.getPixelForValue(opts.value);
+      if (y < chartArea.top || y > chartArea.bottom) return;
+      ctx.save();
+      ctx.strokeStyle = css('--ink-muted');
+      ctx.setLineDash([5, 4]);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(chartArea.left, y);
+      ctx.lineTo(chartArea.right, y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.fillStyle = css('--ink-muted');
+      ctx.textAlign = 'right';
+      ctx.fillText('목표 80%', chartArea.right - 4, y - 5);
+      ctx.restore();
+    }
+  };
+
+  // ── 선 끝 직접 라벨 (보이는 실선이 4개 이하일 때) ───────────
+  const endLabels = {
+    id: 'endLabels',
+    afterDatasetsDraw(chart) {
+      if (chart.canvas.parentElement.clientWidth < 440) return;
+      const metas = chart.getSortedVisibleDatasetMetas()
+        .filter(m => !chart.data.datasets[m.index]._isTrain);
+      if (metas.length < 1 || metas.length > 4) return;
+      const { ctx, chartArea } = chart;
+      const items = metas.map(m => {
+        const pt = last(m.data);
+        return pt ? { label: chart.data.datasets[m.index].label, x: pt.x, y: pt.y } : null;
+      }).filter(Boolean).sort((a, b) => a.y - b.y);
+      for (let i = 1; i < items.length; i++) {
+        if (items[i].y - items[i - 1].y < 13) items[i].y = items[i - 1].y + 13;
+      }
+      ctx.save();
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.fillStyle = css('--ink-2');
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      for (const it of items) {
+        const text = it.label.length > 16 ? it.label.slice(0, 15) + '…' : it.label;
+        ctx.fillText(text, Math.min(it.x + 6, chartArea.right + 4), it.y);
+      }
+      ctx.restore();
+    }
+  };
+
+  function baseOptions(yTitle, yMax, canvasId) {
+    const wide = document.getElementById(canvasId).parentElement.clientWidth >= 440;
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      layout: { padding: { right: wide ? 104 : 8 } },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: css('--surface'),
+          titleColor: css('--ink-1'),
+          bodyColor: css('--ink-2'),
+          borderColor: css('--baseline'),
+          borderWidth: 1,
+          padding: 10,
+          callbacks: { title: items => items.length ? `에폭 ${items[0].label}` : '' }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: '에폭', color: css('--ink-muted'), font: { size: 11 } },
+          grid: { display: false },
+          border: { color: css('--baseline') },
+          ticks: { color: css('--ink-muted'), font: { size: 11 }, maxTicksLimit: 15 }
+        },
+        y: {
+          min: 0, max: yMax,
+          title: { display: true, text: yTitle, color: css('--ink-muted'), font: { size: 11 } },
+          grid: { color: css('--grid') },
+          border: { display: false },
+          ticks: { color: css('--ink-muted'), font: { size: 11 } }
+        }
+      }
+    };
+  }
+
+  function lineStyle(i, dashed) {
+    return {
+      borderColor: color(i),
+      backgroundColor: color(i),
+      borderWidth: 2,
+      borderDash: dashed ? [5, 4] : [],
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      pointHitRadius: 12,
+      tension: 0,
+      spanGaps: true
+    };
+  }
+
+  function maxEpochs() {
+    return Math.max(1, ...state.runs.map(r => r.epochs.length));
+  }
+
+  function accDatasets() {
+    const ds = [];
+    state.runs.forEach((run, i) => {
+      if (!state.visible.has(i)) return;
+      const test = run.metrics.test_acc || [];
+      ds.push({ label: run.name, data: test.map(pct), ...lineStyle(i, false) });
+      if (state.showTrain && run.metrics.train_acc) {
+        ds.push({
+          label: run.name + ' (train)', data: run.metrics.train_acc.map(pct),
+          ...lineStyle(i, true), _isTrain: true
+        });
+      }
+    });
+    return ds;
+  }
+
+  function lossDatasets() {
+    const ds = [];
+    state.runs.forEach((run, i) => {
+      if (!state.visible.has(i)) return;
+      const loss = run.metrics.train_loss || [];
+      ds.push({ label: run.name, data: loss.slice(), ...lineStyle(i, false) });
+    });
+    return ds;
+  }
+
+  function buildCharts() {
+    if (accChart) accChart.destroy();
+    if (lossChart) lossChart.destroy();
+    const labels = Array.from({ length: maxEpochs() }, (_, i) => i + 1);
+
+    const accOpts = baseOptions('정확도 (%)', 100, 'acc-chart');
+    accOpts.plugins.targetLine = { value: 80 };
+    accChart = new Chart(document.getElementById('acc-chart'), {
+      type: 'line',
+      data: { labels, datasets: accDatasets() },
+      options: accOpts,
+      plugins: [targetLine, endLabels]
+    });
+
+    const lossOpts = baseOptions('손실', undefined, 'loss-chart');
+    lossChart = new Chart(document.getElementById('loss-chart'), {
+      type: 'line',
+      data: { labels, datasets: lossDatasets() },
+      options: lossOpts,
+      plugins: [endLabels]
+    });
+  }
+
+  function renderList() {
+    const list = document.getElementById('exp-list');
+    list.innerHTML = '';
+    if (!state.runs.length) {
+      document.getElementById('empty').hidden = false;
+      return;
+    }
+    state.runs.forEach((run, i) => {
+      const row = document.createElement('label');
+      row.className = 'exp-row' + (state.visible.has(i) ? '' : ' off');
+      const chips = Object.entries(run.config || {})
+        .map(([k, v]) => `${k}=${v}`).join(' · ');
+      row.innerHTML = `
+        <input type="checkbox" ${state.visible.has(i) ? 'checked' : ''}>
+        <span class="swatch" style="background:${color(i)}"></span>
+        <span class="exp-name">${run.name}</span>
+        <span class="exp-chips">${chips}</span>
+        <span class="exp-best">최고 ${fmtPct(best(run.metrics.test_acc))}</span>`;
+      row.querySelector('input').addEventListener('change', e => {
+        e.target.checked ? state.visible.add(i) : state.visible.delete(i);
+        row.classList.toggle('off', !e.target.checked);
+        buildCharts();
+      });
+      list.appendChild(row);
+    });
+  }
+
+  function renderTable() {
+    const tbody = document.querySelector('#summary tbody');
+    tbody.innerHTML = '';
+    state.runs.forEach(run => {
+      const m = run.metrics;
+      const note = (run.config && run.config.note) || Object.entries(run.config || {})
+        .map(([k, v]) => `${k}=${v}`).join(', ');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${run.name}</td>
+        <td class="num">${run.epochs.length}</td>
+        <td class="num">${fmtPct(best(m.test_acc))}</td>
+        <td class="num">${fmtPct(last(m.test_acc))}</td>
+        <td class="num">${fmtPct(last(m.train_acc))}</td>
+        <td>${note}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderUpdated() {
+    const dates = state.runs.map(r => r.started).filter(Boolean).sort();
+    document.getElementById('updated').textContent = dates.length
+      ? `마지막 실험: ${dates[dates.length - 1].replace('T', ' ')}`
+      : '기록 없음';
+  }
+
+  document.getElementById('show-train').addEventListener('change', e => {
+    state.showTrain = e.target.checked;
+    buildCharts();
+  });
+  darkMq.addEventListener('change', () => { renderList(); buildCharts(); });
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(buildCharts, 250);
+  });
+
+  loadAll().then(() => {
+    renderUpdated();
+    renderList();
+    renderTable();
+    buildCharts();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "experiments": [
+    "demo1_fc_only",
+    "demo2_full_finetune"
+  ]
+}
