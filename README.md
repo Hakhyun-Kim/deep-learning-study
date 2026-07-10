@@ -42,7 +42,7 @@ checkpoints/ 학습된 가중치 (git 제외)
 
 ## 실험 대시보드
 
-**📊 https://hakhyun-kim.github.io/LLMLearning/** — 실험별 학습 곡선을 겹쳐 보는 대시보드 (GitHub Pages)
+**📊 https://hakhyun-kim.github.io/deep-learning-study/** — 실험별 학습 곡선을 겹쳐 보는 대시보드 (GitHub Pages)
 
 학습 코드에서 로거를 쓰면 자동으로 기록되고, `git push` 하면 1~2분 안에 대시보드가 갱신됩니다:
 

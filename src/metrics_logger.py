@@ -1,7 +1,7 @@
 """학습 지표를 docs/metrics/ 에 JSON으로 기록하는 로거.
 
 에폭마다 log()를 부르면 파일이 갱신되고, git push 하면 GitHub Pages 대시보드
-(https://hakhyun-kim.github.io/LLMLearning/)에 그래프가 자동으로 나타난다.
+(https://hakhyun-kim.github.io/deep-learning-study/)에 그래프가 자동으로 나타난다.
 
 사용법:
     from metrics_logger import MetricsLogger
