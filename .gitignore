@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# 데이터셋 (스탠포드 연구용 배포본 — 저장소에 재배포하지 않음. scripts/download_data.py 로 받을 것)
+data/
+
+# 실험 산출물
+wandb/
+checkpoints/
+runs/
+*.pth
+*.pt
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / IDE
+.vscode/
+Thumbs.db

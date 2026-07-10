@@ -1,0 +1,6 @@
+# PyTorch는 CUDA 버전에 맞춰 별도 인덱스로 설치해야 함:
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+wandb
+grad-cam
+matplotlib
+jupyter
