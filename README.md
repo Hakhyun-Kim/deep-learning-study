@@ -5,8 +5,20 @@ ResNet18 파인튜닝으로 [Stanford 40 Actions](http://vision.stanford.edu/Dat
 
 ## 환경
 
-- Windows 11 / NVIDIA RTX 3050 Laptop (4GB) / Python 3.14
+- Windows 11 / NVIDIA RTX 3050 Ti Laptop (4GB) / Python 3.14
 - PyTorch (CUDA 12.8 빌드)
+
+## 설계 선택
+
+멘토 권장안과 다르게 간 부분은 이유를 남겨둔다.
+
+| 항목 | 선택 | 대신 고려한 것 | 이유 |
+|---|---|---|---|
+| 학습 환경 | 로컬 GPU (RTX 3050 Ti 4GB) | Colab | 세션 시간 제한·환경 초기화 없이 반복 실험 가능. ResNet18 규모는 4GB로 충분 (에폭당 ~18초) |
+| 실험 추적 | 자체 대시보드 (GitHub Pages + JSON) | wandb | 외부 서비스 계정·의존성 없이 실험 기록이 저장소 안에 영구히 남음. `git push`만으로 공개 그래프 갱신. 로거를 직접 만들면서 "무엇을 기록해야 하는가"도 공부됨 |
+| 데이터 배포 | 다운로드 스크립트 (`scripts/download_data.py`) | 저장소에 포함 | 스탠포드가 연구용으로 배포하는 자료라 재배포하지 않음. 스크립트 한 번으로 동일하게 재현 |
+| 학습 코드 | 스크립트 (`src/train.py`) + 옵션 플래그 | 실험마다 노트북 | 실험 간 차이가 커맨드라인 옵션으로 남아 비교·재현이 쉬움. 노트북은 분석(Grad-CAM 등) 용도로만 사용 예정 |
+| 오분류 분석 | pytorch-grad-cam (멘토 권장 그대로, 예정) | - | 모델이 이미지 어디를 보고 판단했는지 시각화 |
 
 ## 시작하기
 
@@ -71,4 +83,4 @@ for epoch in range(num_epochs):
 1. 이론: [모두의 딥러닝 시즌1](https://www.youtube.com/playlist?list=PLlMkM4tgfjnLSOjrEJN31gZATbcj_MpUm)
 2. 실습: [모두의 딥러닝 시즌2 PyTorch](https://deeplearningzerotoall.github.io/season2/lec_pytorch.html)
 3. 프로젝트: ResNet18 파인튜닝 → 베이스라인 → 전체 파인튜닝 → 증강/스케줄러 실험
-4. 분석: [wandb](https://docs.wandb.ai/examples) 학습 곡선, [pytorch-grad-cam](https://github.com/jacobgil/pytorch-grad-cam) 오분류 분석
+4. 분석: [자체 대시보드](https://hakhyun-kim.github.io/deep-learning-study/) 학습 곡선 (wandb 대신 — 설계 선택 참고), [pytorch-grad-cam](https://github.com/jacobgil/pytorch-grad-cam) 오분류 분석
