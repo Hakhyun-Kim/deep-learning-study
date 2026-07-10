@@ -1,6 +1,6 @@
 # Q1. 백본 얼림(freeze)이 무슨 뜻?
 
-> 2026-07-11 · 관련: exp01_fc_only, [`src/train.py`](../src/train.py)의 `build_model()`
+> 2026-07-11 · 관련: exp01_fc_only, [`src/train.py`](../../src/train.py)의 `build_model()`
 
 ## 한 줄 답
 

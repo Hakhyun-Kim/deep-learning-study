@@ -15,9 +15,9 @@ exp01에서 매 에폭 test_acc가 train_acc보다 5~30%p 높았다.
 
 ## 힌트
 
-1. [`src/dataset.py`](../src/dataset.py)의 `build_transform()`에서 train과 test의 변환이 어떻게 다른가?
+1. [`src/dataset.py`](../../src/dataset.py)의 `build_transform()`에서 train과 test의 변환이 어떻게 다른가?
    학습 정확도는 **어떤 이미지**에 대해 측정되고 있나?
-2. [`src/train.py`](../src/train.py)의 `train_one_epoch()`은 에폭 **도중에** 정확도를 누적한다.
+2. [`src/train.py`](../../src/train.py)의 `train_one_epoch()`은 에폭 **도중에** 정확도를 누적한다.
    에폭 초반의 모델과 끝날 때의 모델은 같은 모델인가?
 
 ## 내 답 (직접 채우기)
@@ -37,7 +37,7 @@ exp01에서 매 에폭 test_acc가 train_acc보다 5~30%p 높았다.
 
 ### 이유 1 — train은 일부러 어렵게 만든 이미지로 측정된다
 
-[`build_transform()`](../src/dataset.py)을 보면:
+[`build_transform()`](../../src/dataset.py)을 보면:
 
 - **train**: `RandomResizedCrop(224)` + `RandomHorizontalFlip()`.
   `RandomResizedCrop`은 기본값이 원본 면적의 **8%~100%를 무작위로** 잘라내는 것이라,
@@ -51,7 +51,7 @@ exp01에서 매 에폭 test_acc가 train_acc보다 5~30%p 높았다.
 
 ### 이유 2 — train_acc는 "성장 중인 모델"의 에폭 평균이다
 
-[`train_one_epoch()`](../src/train.py)은 에폭을 도는 **도중에** 배치마다 정답 수를 누적한다.
+[`train_one_epoch()`](../../src/train.py)은 에폭을 도는 **도중에** 배치마다 정답 수를 누적한다.
 에폭 1을 예로 들면:
 
 - 첫 배치: fc층이 무작위 초기값 → 사실상 찍기(40클래스면 ~2.5%)
