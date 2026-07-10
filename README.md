@@ -57,6 +57,11 @@ checkpoints/ 학습된 가중치 (git 제외)
 
 **📊 https://hakhyun-kim.github.io/deep-learning-study/** — 실험별 학습 곡선을 겹쳐 보는 대시보드 (GitHub Pages)
 
+[![현재 학습 곡선 (test_acc)](docs/preview.svg)](https://hakhyun-kim.github.io/deep-learning-study/)
+
+위 미리보기(`docs/preview.svg`)는 `metrics_logger`가 에폭마다 자동으로 다시 그린다.
+push하면 README도 최신 곡선으로 갱신됨 (GitHub 이미지 캐시 때문에 몇 분 걸릴 수 있음).
+
 학습 코드에서 로거를 쓰면 자동으로 기록되고, `git push` 하면 1~2분 안에 대시보드가 갱신됩니다:
 
 ```python

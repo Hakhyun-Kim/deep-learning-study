@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="360" viewBox="0 0 720 360" font-family="sans-serif">
+<line x1="52" y1="316.0" x2="704" y2="316.0" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="320.0" text-anchor="end" font-size="12" fill="#8b8b8b">0%</text>
+<line x1="52" y1="256.4" x2="704" y2="256.4" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="260.4" text-anchor="end" font-size="12" fill="#8b8b8b">20%</text>
+<line x1="52" y1="196.8" x2="704" y2="196.8" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="200.8" text-anchor="end" font-size="12" fill="#8b8b8b">40%</text>
+<line x1="52" y1="137.2" x2="704" y2="137.2" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="141.2" text-anchor="end" font-size="12" fill="#8b8b8b">60%</text>
+<line x1="52" y1="77.6" x2="704" y2="77.6" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="81.6" text-anchor="end" font-size="12" fill="#8b8b8b">80%</text>
+<line x1="52" y1="18.0" x2="704" y2="18.0" stroke="#8b8b8b" stroke-opacity="0.25"/>
+<text x="44" y="22.0" text-anchor="end" font-size="12" fill="#8b8b8b">100%</text>
+<line x1="52" y1="77.6" x2="704" y2="77.6" stroke="#F43F5E" stroke-dasharray="6 4" stroke-opacity="0.8"/>
+<text x="704" y="71.6" text-anchor="end" font-size="12" fill="#F43F5E">목표 80%</text>
+<text x="52.0" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">1</text>
+<text x="124.4" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">2</text>
+<text x="196.9" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">3</text>
+<text x="269.3" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">4</text>
+<text x="341.8" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">5</text>
+<text x="414.2" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">6</text>
+<text x="486.7" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">7</text>
+<text x="559.1" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">8</text>
+<text x="631.6" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">9</text>
+<text x="704.0" y="336" text-anchor="middle" font-size="12" fill="#8b8b8b">10</text>
+<text x="704" y="354" text-anchor="end" font-size="12" fill="#8b8b8b">epoch</text>
+<polyline points="52.0,153.3 124.4,130.9 196.9,121.3 269.3,118.3 341.8,116.5 414.2,115.8 486.7,113.7 559.1,109.2 631.6,110.3 704.0,109.9" fill="none" stroke="#6366F1" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="704.0" cy="109.9" r="3.5" fill="#6366F1"/>
+<rect x="64" y="21" width="10" height="10" fill="#6366F1"/>
+<text x="80" y="30" font-size="12" fill="#8b8b8b">exp01_fc_only · 최고 69.4%</text>
+<line x1="52" y1="316" x2="704" y2="316" stroke="#8b8b8b" stroke-opacity="0.6"/>
+</svg>
