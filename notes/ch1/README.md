@@ -10,7 +10,7 @@
 |---|---|---|---|
 | 1 | [concepts.md](concepts.md) | **개념 사전** — 필수 용어를 파이프라인 순서대로 (그림 포함) | 처음 한 번 정독, 이후 모르는 단어 나올 때 사전처럼 |
 | 2 | [notes.md](notes.md) | **학습 노트** — exp01에서 이미지 한 장이 예측이 되기까지 코드 따라가기 | 개념을 코드와 연결하고 싶을 때 |
-| 3 | [q01](q01-backbone-freeze.md) [q02](q02-why-test-acc-higher.md) [q03](q03-full-finetune-low-lr.md) | **질문 노트** — 공부하다 생긴 질문과 답 (q02·q03은 먼저 스스로 답해보기) | 복습할 때. 제목만 보고 답이 떠오르면 통과 |
+| 3 | [q01](q01-backbone-freeze.md) [q02](q02-why-test-acc-higher.md) [q03](q03-full-finetune-low-lr.md) [q04](q04-eval-loss-labels.md) | **질문 노트** — 공부하다 생긴 질문과 답 (q02·q03은 먼저 스스로 답해보기) | 복습할 때. 제목만 보고 답이 떠오르면 통과 |
 
 이미지·다이어그램은 mermaid로 문서 안에 직접 넣는다 (GitHub이 자동 렌더링).
 스크린샷 등 파일로 넣어야 하는 그림이 생기면 `notes/ch1/assets/`를 만들어 담기.
