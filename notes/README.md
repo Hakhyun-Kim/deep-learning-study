@@ -29,3 +29,4 @@
 | [q02](ch1/q02-why-test-acc-higher.md) | 왜 test_acc가 train_acc보다 높지? (보통은 반대인데) | 🤔 스스로 생각해보기 · 해설 있음 | exp01 학습 곡선 |
 | [q03](ch1/q03-full-finetune-low-lr.md) | 전체 파인튜닝은 왜 학습률을 10배 낮추나? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 (예정) |
 | [q04](ch1/q04-eval-loss-labels.md) | 평가 때 손실은 어떻게 계산하지? 정답이 없는데? | ✅ 정리됨 | `train.py` `evaluate()` |
+| [q05](ch1/q05-deploy-to-real-world.md) | 정답지 없는 현실 데이터에는 어떻게 적용하나? | ✅ 정리됨 | q04에서 이어짐 |
