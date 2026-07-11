@@ -53,6 +53,15 @@ data/       데이터셋 (git 제외)
 checkpoints/ 학습된 가중치 (git 제외)
 ```
 
+## 공부 노트
+
+**📚 [notes/](notes/README.md)** — 챕터별 공부 노트 (개념 사전 · 코드 따라가기 · 질문 노트)
+
+| 챕터 | 주제 | 상태 |
+|---|---|---|
+| [ch1 — 전이학습 베이스라인](notes/ch1/README.md) | 딥러닝 기본 개념 + exp01, 질문 q01~q06 | 진행 중 |
+| ch2 — 전체 파인튜닝 (예정) | exp02, 목표 80% 근접 | - |
+
 ## 실험 대시보드
 
 **📊 https://hakhyun-kim.github.io/deep-learning-study/** — 실험별 학습 곡선을 겹쳐 보는 대시보드 (GitHub Pages)
