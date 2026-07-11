@@ -1,5 +1,6 @@
 {
   "experiments": [
-    "exp01_fc_only"
+    "exp01_fc_only",
+    "exp02_full_finetune"
   ]
 }
