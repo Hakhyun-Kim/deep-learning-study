@@ -10,7 +10,20 @@
 |---|---|---|---|
 | 1 | [concepts.md](concepts.md) | **개념 사전** — 필수 용어를 파이프라인 순서대로 (그림 포함) | 처음 한 번 정독, 이후 모르는 단어 나올 때 사전처럼 |
 | 2 | [notes.md](notes.md) | **학습 노트** — exp01에서 이미지 한 장이 예측이 되기까지 코드 따라가기 | 개념을 코드와 연결하고 싶을 때 |
-| 3 | [q01](q01-backbone-freeze.md) [q02](q02-why-test-acc-higher.md) [q03](q03-full-finetune-low-lr.md) [q04](q04-eval-loss-labels.md) [q05](q05-deploy-to-real-world.md) [q06](q06-tesla-rule-to-e2e.md) | **질문 노트** — 공부하다 생긴 질문과 답 (q02·q03은 먼저 스스로 답해보기) | 복습할 때. 제목만 보고 답이 떠오르면 통과 |
+| 3 | 아래 질문 목록 | **질문 노트** — 공부하다 생긴 질문과 답 (q02·q03은 먼저 스스로 답해보기) | 복습할 때. 제목만 보고 답이 떠오르면 통과 |
+
+## 질문 목록
+
+학습 루프 → 평가 → 배포 → 산업 사례 순서로 이어진다.
+
+| # | 질문 | 상태 | 관련 |
+|---|------|------|------|
+| [q01](q01-backbone-freeze.md) | 백본 얼림(freeze)이 무슨 뜻? | ✅ 정리됨 | exp01, `train.py` |
+| [q02](q02-why-test-acc-higher.md) | 왜 test_acc가 train_acc보다 높지? (보통은 반대인데) | 🤔 스스로 생각해보기 · 해설 있음 | exp01 학습 곡선 |
+| [q03](q03-full-finetune-low-lr.md) | 전체 파인튜닝은 왜 학습률을 10배 낮추나? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 (예정) |
+| [q04](q04-eval-loss-labels.md) | 평가 때 손실은 어떻게 계산하지? 정답이 없는데? | ✅ 정리됨 | `train.py` `evaluate()` |
+| [q05](q05-deploy-to-real-world.md) | 정답지 없는 현실 데이터에는 어떻게 적용하나? | ✅ 정리됨 | q04에서 이어짐 |
+| [q06](q06-tesla-rule-to-e2e.md) | 테슬라는 어떻게 룰베이스에서 E2E로 갔나? | ✅ 정리됨 | q05에서 이어짐 |
 
 이미지·다이어그램은 mermaid로 문서 안에 직접 넣는다 (GitHub이 자동 렌더링).
 스크린샷 등 파일로 넣어야 하는 그림이 생기면 `notes/ch1/assets/`를 만들어 담기.
