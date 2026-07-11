@@ -91,7 +91,8 @@ for epoch in range(num_epochs):
 | # | 실험 | 설정 | Test Acc | 메모 |
 |---|------|------|----------|------|
 | 1 | exp01_fc_only | 백본 얼림, fc만 학습 / AdamW lr 1e-3, batch 32, 10에폭 | **69.4%** | 학습 파라미터 2만 개(전체 0.2%)만으로 도달. 에폭당 ~18초 |
-| 2 | (예정) exp02_full_finetune | 전체 파인튜닝, lr 1e-4 | - | 목표: 80% 근접 |
+| 2 | exp02_full_finetune | 전체 파인튜닝 / AdamW lr 1e-4, batch 32, 10에폭 | **75.7%** | +6.2%p. 에폭당 ~28초(1.5배, [q07](notes/ch2/q07-why-slower-epochs.md)). 5에폭 이후 정체, 목표 80%에 -4.4%p → ch3에서 증강·스케줄러 |
+| 2b | exp02b_full_lr1e-3 | 전체 파인튜닝, lr만 10배 ↑ (통제 실험) | 55.0% | 1에폭 21.7%로 붕괴 후 미회복 — catastrophic forgetting 실증, [q03](notes/ch1/q03-full-finetune-low-lr.md) 검증 |
 
 ## 학습 로드맵
 

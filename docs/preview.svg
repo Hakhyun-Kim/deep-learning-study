@@ -32,5 +32,9 @@
 <circle cx="704.0" cy="90.6" r="3.5" fill="#10B981"/>
 <rect x="64" y="41" width="10" height="10" fill="#10B981"/>
 <text x="80" y="50" font-size="12" fill="#8b8b8b">exp02_full_finetune · 최고 75.7%</text>
+<polyline points="52.0,251.4 124.4,202.4 196.9,201.3 269.3,188.1 341.8,176.6 414.2,176.8 486.7,188.2 559.1,167.8 631.6,178.0 704.0,152.2" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="704.0" cy="152.2" r="3.5" fill="#F59E0B"/>
+<rect x="64" y="61" width="10" height="10" fill="#F59E0B"/>
+<text x="80" y="70" font-size="12" fill="#8b8b8b">exp02b_full_lr1e-3 · 최고 55.0%</text>
 <line x1="52" y1="316" x2="704" y2="316" stroke="#8b8b8b" stroke-opacity="0.6"/>
 </svg>
