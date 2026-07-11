@@ -38,3 +38,4 @@
 |---|------|------|------|
 | [q03](ch1/q03-full-finetune-low-lr.md) | 전체 파인튜닝은 왜 학습률을 10배 낮추나? | ✅ exp02 vs exp02b로 확인 | exp02, exp02b |
 | [q07](ch2/q07-why-slower-epochs.md) | 학습 파라미터가 546배인데 에폭 시간도 546배 걸릴까? | ✅ 실측 1.5배 — 이유 정리됨 | exp02 실측 |
+| [q08](ch2/q08-lr-big-relative-to-what.md) | lr 1e-3이 "큰 발자국"이라는 건 어떻게 아나? 상대적인 값 아닌가? | ✅ 가중치 이동량 실측으로 확인 | exp02 vs exp02b |
