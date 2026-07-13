@@ -25,6 +25,7 @@
 | [q05](q05-deploy-to-real-world.md) | 정답지 없는 현실 데이터에는 어떻게 적용하나? | ✅ 정리됨 | q04에서 이어짐 |
 | [q06](q06-tesla-rule-to-e2e.md) | 테슬라는 어떻게 룰베이스에서 E2E로 갔나? | ✅ 정리됨 | q05에서 이어짐 |
 | [q10](q10-learning-paradigms-and-llms.md) | 지도·자기지도·강화학습 차이와, Claude는 어떤 학습으로 만드나? | ✅ 정리됨 | q06에서 이어짐, exp02 전이학습 |
+| [q11](q11-why-llms-improve-so-fast.md) | 왜 요즘 LLM은 3개월 단위로 빠르게 좋아지나? 질답 데이터 축적 때문? | ✅ 정리됨 | q10에서 이어짐 |
 
 이미지·다이어그램은 mermaid로 문서 안에 직접 넣는다 (GitHub이 자동 렌더링).
 스크린샷 등 파일로 넣어야 하는 그림이 생기면 `notes/ch1/assets/`를 만들어 담기.
