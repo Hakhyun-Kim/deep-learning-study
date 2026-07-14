@@ -43,6 +43,7 @@ python scripts/gradcam.py            # 그림 진단 (한글 깨지면 $env:PYTH
 |---|------|------|------|
 | [q09](q09-shortcut-learning.md) | 배경(글씨·접시) 보고 행동 맞히면, 정확도는 높은데 왜 문제? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 Grad-CAM, `gradcam.py` |
 | [q10](q10-gradcam-mechanism.md) | Grad-CAM은 "모델이 본 이미지 부분"을 어떻게 찾아내나? | 🤔 스스로 생각해보기 · 해설 있음 | `gradcam.py` (특징 지도 × 기울기) |
+| [q11](q11-pytorch-speed-and-stack.md) | PyTorch는 빠른가? 실무는 뭘 쓰나? 소스를 직접 고칠 수 있나? | ✅ 정리됨 | `train.py` `backward()`, ch4(배포) |
 
 ## ch3 졸업 체크리스트
 
