@@ -39,6 +39,10 @@ def parse_args() -> argparse.Namespace:
                         help="백본(합성곱층) 가중치를 얼리고 fc층만 학습")
     parser.add_argument("--workers", type=int, default=2,
                         help="DataLoader 워커 수 (0이면 메인 프로세스에서 로드)")
+    parser.add_argument("--person-crop", action="store_true",
+                        help="공식 bbox로 사람 주변만 잘라 학습/평가 (exp05)")
+    parser.add_argument("--crop-margin", type=float, default=1.5,
+                        help="person-crop 시 bbox를 몇 배로 넓혀 자를지")
     parser.add_argument("--smoke", action="store_true",
                         help="파이프라인 동작 확인: 일부 데이터로 1에폭만")
     args = parser.parse_args()
@@ -99,8 +103,10 @@ def main() -> None:
     print(f"장치: {device}"
           + (f" ({torch.cuda.get_device_name(0)})" if device.type == "cuda" else ""))
 
-    train_set = Stanford40("train", transform=build_transform(train=True))
-    test_set = Stanford40("test", transform=build_transform(train=False))
+    train_set = Stanford40("train", transform=build_transform(train=True),
+                           person_crop=args.person_crop, crop_margin=args.crop_margin)
+    test_set = Stanford40("test", transform=build_transform(train=False),
+                          person_crop=args.person_crop, crop_margin=args.crop_margin)
     if args.smoke:
         args.name, args.epochs, args.workers = "smoke", 1, 0
         train_set = Subset(train_set, range(0, len(train_set), 20))  # 200장
@@ -126,6 +132,8 @@ def main() -> None:
         logger = MetricsLogger(args.name, config={
             "epochs": args.epochs, "batch_size": args.batch_size, "lr": args.lr,
             "freeze_backbone": args.freeze_backbone, "device": str(device),
+            "person_crop": args.person_crop,
+            "crop_margin": args.crop_margin if args.person_crop else None,
         })
 
     best_acc = 0.0

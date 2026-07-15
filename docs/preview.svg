@@ -44,5 +44,9 @@
 <circle cx="704.0" cy="94.7" r="3.5" fill="#8B5CF6"/>
 <rect x="64" y="101" width="10" height="10" fill="#8B5CF6"/>
 <text x="80" y="110" font-size="12" fill="#8b8b8b">exp04_aug_epochs20 · 최고 75.8%</text>
+<polyline points="52.0,164.8 86.3,138.6 120.6,130.6 154.9,121.8 189.3,118.6 223.6,114.7 257.9,111.6 292.2,109.1 326.5,105.1 360.8,108.7 395.2,110.8 429.5,107.9 463.8,111.7 498.1,109.0 532.4,107.3 566.7,111.3 601.1,105.2 635.4,105.4 669.7,105.1 704.0,107.3" fill="none" stroke="#06B6D4" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="704.0" cy="107.3" r="3.5" fill="#06B6D4"/>
+<rect x="64" y="121" width="10" height="10" fill="#06B6D4"/>
+<text x="80" y="130" font-size="12" fill="#8b8b8b">exp05_person_crop · 최고 70.8%</text>
 <line x1="52" y1="316" x2="704" y2="316" stroke="#8b8b8b" stroke-opacity="0.6"/>
 </svg>

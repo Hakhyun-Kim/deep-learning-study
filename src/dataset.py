@@ -6,6 +6,7 @@ data/ImageSplits/<클래스명>_train.txt / _test.txt 에 적힌 공식 split을
 - train: 클래스당 100장 = 총 4,000장
 - test:  나머지 5,532장
 """
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from PIL import Image
@@ -55,11 +56,40 @@ def build_transform(train: bool) -> transforms.Compose:
     ])
 
 
+def load_person_bbox(image_name: str) -> tuple[int, int, int, int]:
+    """공식 XMLAnnotations에서 사람 bounding box (xmin, ymin, xmax, ymax)를 읽는다.
+
+    Stanford 40은 "이 사람의 행동을 맞혀라"가 원 과제라서 사진마다 대상 인물의
+    위치 주석을 제공한다 (Yao et al., ICCV 2011). exp05(person-crop)에서 사용.
+    """
+    xml_path = DATA_DIR / "XMLAnnotations" / f"{Path(image_name).stem}.xml"
+    box = ET.parse(xml_path).getroot().find("object/bndbox")
+    return tuple(int(float(box.find(k).text))
+                 for k in ("xmin", "ymin", "xmax", "ymax"))
+
+
+def crop_person(image: Image.Image, bbox, margin: float) -> Image.Image:
+    """사람 bbox를 margin배로 넓혀서 자른다 (이미지 경계에서 clamp).
+
+    margin=1.0이면 사람만 딱, 1.5면 주변 문맥(들고 있는 물건, 옆의 말 일부)을
+    포함. 배경 지름길(먼 칠판)은 버리고 정당한 문맥은 남기는 절충이 목적.
+    """
+    xmin, ymin, xmax, ymax = bbox
+    cx, cy = (xmin + xmax) / 2, (ymin + ymax) / 2
+    half_w, half_h = (xmax - xmin) / 2 * margin, (ymax - ymin) / 2 * margin
+    return image.crop((max(0, round(cx - half_w)), max(0, round(cy - half_h)),
+                       min(image.width, round(cx + half_w)),
+                       min(image.height, round(cy + half_h))))
+
+
 class Stanford40(Dataset):
-    def __init__(self, split: str, transform=None):
+    def __init__(self, split: str, transform=None,
+                 person_crop: bool = False, crop_margin: float = 1.5):
         assert split in ("train", "test"), f"split은 train/test 중 하나: {split}"
         self.classes = load_class_names()
         self.transform = transform
+        self.person_crop = person_crop
+        self.crop_margin = crop_margin
         # (이미지 경로, 라벨 번호) 목록. 라벨 번호는 actions.txt 순서(0~39).
         self.samples: list[tuple[Path, int]] = []
         for label, name in enumerate(self.classes):
@@ -74,6 +104,8 @@ class Stanford40(Dataset):
         path, label = self.samples[idx]
         # 흑백 이미지가 섞여 있어서 전부 RGB 3채널로 통일한다.
         image = Image.open(path).convert("RGB")
+        if self.person_crop:
+            image = crop_person(image, load_person_bbox(path.name), self.crop_margin)
         if self.transform:
             image = self.transform(image)
         return image, label
