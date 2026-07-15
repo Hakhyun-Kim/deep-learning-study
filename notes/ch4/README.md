@@ -32,4 +32,6 @@
 
 ## 질문 목록
 
-(ch4 신규 질문 없음 — 생기면 q13부터 추가)
+| # | 질문 | 상태 | 관련 |
+|---|------|------|------|
+| [q13](q13-where-does-resnet18-come-from.md) | 우리가 쓰던 ResNet18은 어디서 온 거야? | ✅ 정리됨 | `train.py` build_model, He et al. 2016 |

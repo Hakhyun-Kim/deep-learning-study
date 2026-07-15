@@ -51,4 +51,10 @@
 | [q09](ch3/q09-shortcut-learning.md) | 배경(글씨·접시) 보고 행동 맞히면, 정확도는 높은데 왜 문제? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 Grad-CAM, `gradcam.py` |
 | [q10](ch3/q10-gradcam-mechanism.md) | Grad-CAM은 "모델이 본 이미지 부분"을 어떻게 찾아내나? | 🤔 스스로 생각해보기 · 해설 있음 | `gradcam.py` (특징 지도 × 기울기) |
 | [q12](ch3/q12-center-bias-spatial-prior.md) | 모델은 가운데를 "먼저" 보나? 중앙 편향은 어떤 형태인가? | ✅ 실측(+7.1%p)으로 확인 | `position_sensitivity.py`, TTA 77.77% |
+
+## ch4 질문 목록
+
+| # | 질문 | 상태 | 관련 |
+|---|------|------|------|
+| [q13](ch4/q13-where-does-resnet18-come-from.md) | 우리가 쓰던 ResNet18은 어디서 온 거야? | ✅ 정리됨 | `train.py` build_model, He et al. 2016 |
 | [q11](ch3/q11-pytorch-speed-and-stack.md) | PyTorch는 빠른가? 실무는 뭘 쓰나? 소스를 직접 고칠 수 있나? | ✅ 정리됨 | `train.py` `backward()`, ch4(배포) |
