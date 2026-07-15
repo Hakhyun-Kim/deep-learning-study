@@ -4,7 +4,8 @@ ResNet18 파인튜닝으로 [Stanford 40 Actions](http://vision.stanford.edu/Dat
 (사람 행동 40클래스 분류) **테스트 정확도 80% 달성**을 목표로 하는 학습 프로젝트.
 
 > 🎉 **목표 달성 — 최종 80.71%** (사람 시야 + 전체 시야 5-crop TTA의 두-시야 앙상블).
-> 여정과 한계 기록: [notes/ch4](notes/ch4/README.md)
+> 여정과 한계 기록: [notes/ch4](notes/ch4/README.md) ·
+> 📄 **[논문 형식 기술 보고서 (PAPER.md)](PAPER.md)**
 
 ## 환경
 
