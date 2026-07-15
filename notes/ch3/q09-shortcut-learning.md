@@ -68,3 +68,44 @@ writing_on_a_board"가 학습 데이터 안에서는 자주 맞으니까. 그럼
 맞는데(사람·손을 봄) 마지막 구분에서 지는" 다른 종류의 오답 — 지름길과 구별할 것.
 처방: [ch3 notes 4단계 exp03 설계](notes.md#4단계-exp03-설계--한-번에-한-변수만).
 </details>
+
+## 용어의 영어 원문 (논문·문서에서 만나는 이름들)
+
+- **Shortcut learning (지름길 학습)** — 정식 용어. 대표 논문:
+  Geirhos et al., *"Shortcut Learning in Deep Neural Networks"*
+  (Nature Machine Intelligence, 2020). 정의 한 줄: shortcut = 표준 벤치마크에서는
+  잘 통하지만, 더 어려운 실제 조건으로 옮기면 실패하는 결정 규칙
+  (decision rules that perform well on standard benchmarks but fail to
+  transfer to more challenging testing conditions).
+- **Spurious correlation (거짓 상관)** — 지름길의 재료. "칠판"과 "쓰기 행동"은
+  인과가 아니라 **데이터 수집 과정에서 우연히 같이 나오는 상관**일 뿐.
+  spurious = "겉보기엔 진짜 같지만 가짜인". 이런 단서를 **spurious feature /
+  spurious cue**라 부른다.
+- **Clever Hans effect (영리한 한스 효과)** — 자주 쓰는 별칭. 1900년대 초 독일의
+  "산수하는 말" 한스는 사실 산수가 아니라, 정답 횟수에 가까워질 때 **질문자의
+  표정·자세가 긴장하는 것**을 읽고 발굽을 멈췄다(질문자가 답을 모르면 못 맞힘).
+  **성적은 완벽한데 이유가 엉터리** — 정확히 우리 exp02다. 이런 모델을
+  "Clever Hans predictor"라 부른다.
+- **Distribution shift (분포 변화)** — 지름길이 **들통나는 순간**. 학습 때의
+  상관("칠판=쓰기")이 깨진 데이터를 만나는 것. reading_076이 그 순간이다 —
+  칠판은 있는데 행동은 reading.
+- **Texture / background bias (질감·배경 편향)** — CNN이 물체 형태(shape)보다
+  질감·배경에 기대는 경향. 우리 사례는 **background bias**에 해당.
+
+### 왜 모델은 지름길로 가나 (메커니즘 한 단락)
+
+경사하강법은 손실을 줄이는 **가장 쉬운 길**을 먼저 찾는다. writing_on_a_board
+학습 사진 100장에는 전부 글씨 적힌 칠판이 있고, 칠판은 크고 대비가 뚜렷해서
+"쓰는 동작"(손·팔 자세의 미묘한 조합)보다 훨씬 배우기 쉽다. 쉬운 규칙으로
+점수가 나오면 어려운 규칙을 배울 이유가 없다 — 그래서 지름길로 간다.
+비유: "긴 문제는 답이 ③"으로 모의고사를 푸는 학생. 그 학교 기출에선 점수가
+나오지만, 출제자가 바뀌는 순간 무너지고 풀이 과정이 없어 뭘 모르는지도 알 수 없다.
+
+### exp03 결과를 이 관점으로 읽기 (2026-07-15)
+
+RandomErasing(최대 20% 조각 지우기)은 **작은 배경 단서**에 기대던 지름길은
+흔들었지만(waving_hands +13.6%p), 칠판·접시처럼 화면 절반을 차지하는 **큰 배경**
+지름길은 못 깼다(3인방 전부 95~100% 확신 오답 유지). 처방의 방향은 맞았는데
+**용량이 병의 크기에 못 미친** 것. → 지름길 개념을 알면 이 실패를 "증강 무용"이
+아니라 "이 지름길엔 이 강도로 부족"으로 정확히 읽을 수 있다.
+상세: [notes.md 결과 기록](notes.md#결과-기록-2026-07-15-실측-exp03_aug_stronger).
