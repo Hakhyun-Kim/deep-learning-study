@@ -3,6 +3,9 @@
 ResNet18 파인튜닝으로 [Stanford 40 Actions](http://vision.stanford.edu/Datasets/40actions.html)
 (사람 행동 40클래스 분류) **테스트 정확도 80% 달성**을 목표로 하는 학습 프로젝트.
 
+> 🎉 **목표 달성 — 최종 80.71%** (사람 시야 + 전체 시야 5-crop TTA의 두-시야 앙상블).
+> 여정과 한계 기록: [notes/ch4](notes/ch4/README.md)
+
 ## 환경
 
 - Windows 11 / NVIDIA RTX 3050 Ti Laptop (4GB) / Python 3.14
@@ -59,8 +62,10 @@ checkpoints/ 학습된 가중치 (git 제외)
 
 | 챕터 | 주제 | 상태 |
 |---|---|---|
-| [ch1 — 전이학습 베이스라인](notes/ch1/README.md) | 딥러닝 기본 개념 + exp01, 질문 q01~q06 | 완료 |
-| [ch2 — 전체 파인튜닝](notes/ch2/README.md) | exp02, 목표 80% 근접, 질문 q07 | 진행 중 |
+| [ch1 — 전이학습 베이스라인](notes/ch1/README.md) | 딥러닝 기본 개념 + exp01 (69.4%) | 완료 |
+| [ch2 — 전체 파인튜닝](notes/ch2/README.md) | exp02 75.7% / exp02b 통제 실험 | 완료 |
+| [ch3 — 분석과 개선](notes/ch3/README.md) | Grad-CAM 진단(지름길·중앙 prior) → 증강·TTA·앙상블 **80.71%** | 완료 |
+| [ch4 — 마무리](notes/ch4/README.md) | 최종 재진단, 한계 기록(모델 카드), 회고 | 진행 중 |
 
 ## 실험 대시보드
 
@@ -91,8 +96,12 @@ for epoch in range(num_epochs):
 | # | 실험 | 설정 | Test Acc | 메모 |
 |---|------|------|----------|------|
 | 1 | exp01_fc_only | 백본 얼림, fc만 학습 / AdamW lr 1e-3, batch 32, 10에폭 | **69.4%** | 학습 파라미터 2만 개(전체 0.2%)만으로 도달. 에폭당 ~18초 |
-| 2 | exp02_full_finetune | 전체 파인튜닝 / AdamW lr 1e-4, batch 32, 10에폭 | **75.7%** | +6.2%p. 에폭당 ~28초(1.5배, [q07](notes/ch2/q07-why-slower-epochs.md)). 5에폭 이후 정체, 목표 80%에 -4.4%p → ch3에서 증강·스케줄러 |
+| 2 | exp02_full_finetune | 전체 파인튜닝 / AdamW lr 1e-4, batch 32, 10에폭 | **75.7%** | +6.2%p. 에폭당 ~28초(1.5배, [q07](notes/ch2/q07-why-slower-epochs.md)) |
 | 2b | exp02b_full_lr1e-3 | 전체 파인튜닝, lr만 10배 ↑ (통제 실험) | 55.0% | 1에폭 21.7%로 붕괴 후 미회복 — catastrophic forgetting 실증, [q03](notes/ch1/q03-full-finetune-low-lr.md) 검증 |
+| 3 | exp03_aug_stronger | + ColorJitter/RandomErasing | 75.05% | 과적합 격차 4.7→1.2%p, 10에폭으론 덜 수렴 |
+| 4 | exp04_aug_epochs20 | + 에폭 20 | **75.80%** | ep12 최고, 이후 과적합. +5-crop TTA 시 77.77% |
+| 5 | exp05_person_crop | 공식 bbox 1.5배 crop | 70.79% | 단독으론 문맥 손실로 하락 — 앙상블 재료 |
+| ★ | **두-시야 앙상블** | 사람(exp05) 0.3 + 전체(exp04) TTA 0.7 | 🎉 **80.71%** | 상보성의 힘. 재현: `python scripts/two_view_ensemble.py --tta`. 한계: [ch4](notes/ch4/notes.md#한계-정직한-기록) |
 
 ## 학습 로드맵
 
