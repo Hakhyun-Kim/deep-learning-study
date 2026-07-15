@@ -20,7 +20,7 @@
 |---|---|---|
 | [ch1](ch1/README.md) | 전이학습 베이스라인 — 딥러닝 기본 개념 + exp01 (69.4%) | 완료 (q02 내 답 채우기 남음) |
 | [ch2](ch2/README.md) | 전체 파인튜닝 — exp02 75.7% / exp02b 55.0% (q03 검증) | 실험·질문 완료, 졸업 체크리스트 남음 |
-| [ch3](ch3/README.md) | 분석과 개선 — Grad-CAM으로 exp02 진단(지름길 학습 발견), exp03 증강 실험(75.05%) | exp03 완료, exp04(에폭 20) 남음 |
+| [ch3](ch3/README.md) | 분석과 개선 — Grad-CAM 진단(지름길 발견) → exp03·exp04 증강 실험 → TTA 77.77% | exp04·위치 진단 완료, 최종 카드 결정 남음 |
 
 ## ch1 질문 목록
 
@@ -49,4 +49,5 @@
 |---|------|------|------|
 | [q09](ch3/q09-shortcut-learning.md) | 배경(글씨·접시) 보고 행동 맞히면, 정확도는 높은데 왜 문제? | 🤔 스스로 생각해보기 · 해설 있음 | exp02 Grad-CAM, `gradcam.py` |
 | [q10](ch3/q10-gradcam-mechanism.md) | Grad-CAM은 "모델이 본 이미지 부분"을 어떻게 찾아내나? | 🤔 스스로 생각해보기 · 해설 있음 | `gradcam.py` (특징 지도 × 기울기) |
+| [q12](ch3/q12-center-bias-spatial-prior.md) | 모델은 가운데를 "먼저" 보나? 중앙 편향은 어떤 형태인가? | ✅ 실측(+7.1%p)으로 확인 | `position_sensitivity.py`, TTA 77.77% |
 | [q11](ch3/q11-pytorch-speed-and-stack.md) | PyTorch는 빠른가? 실무는 뭘 쓰나? 소스를 직접 고칠 수 있나? | ✅ 정리됨 | `train.py` `backward()`, ch4(배포) |
