@@ -33,9 +33,12 @@ python scripts/gradcam.py            # 그림 진단 (한글 깨지면 $env:PYTH
 - [x] 진단 결과 [notes.md 2단계](notes.md#2단계-진단-결과-2026-07-13-실측-exp02)에 기록
       (약한 클래스·혼동 쌍·Grad-CAM 3대 사례)
 - [ ] [q09](q09-shortcut-learning.md) "스스로 생각해보기"에 내 답 적어보기
-- [ ] exp03 후보(증강 강화 vs cosine) 중 **하나** 고르고 [실행 전 예상](notes.md#실행-전-예상-돌리기-전에-먼저-적기) 채우기
-- [ ] exp03 실행 → `analyze_errors.py`로 재진단, before/after 비교
-- [ ] 대시보드에 exp03 곡선 push
+- [x] exp03 후보 중 **후보 A(증강 강화)** 선택 (예상 미기입 — exp04에선 먼저 적기)
+- [x] exp03 실행 → `analyze_errors.py`로 재진단, before/after 비교
+      ([notes.md 결과 기록](notes.md#결과-기록-2026-07-15-실측-exp03_aug_stronger):
+      75.05%, 과적합↓·약한 클래스 일부↑, 큰 배경 지름길은 생존)
+- [x] 대시보드에 exp03 곡선 push
+- [ ] exp04: 증강 유지 + 에폭 20 (덜 수렴 신호가 최대) — 실행 전 예상 먼저
 
 ## 질문 목록
 

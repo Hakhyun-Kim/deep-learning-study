@@ -32,13 +32,20 @@ def build_transform(train: bool) -> transforms.Compose:
     학습용은 무작위 크롭 + 좌우반전으로 매 에폭 조금씩 다른 이미지를 보여줘서
     (데이터 증강) 과적합을 줄인다. 평가용은 항상 같은 결과가 나오도록
     결정적인 변환(가운데 크롭)만 쓴다.
+
+    exp03(ch3)부터 두 가지를 더한다 — 배경 지름길 진단(notes/ch3/notes.md)에 대한 처방:
+    - ColorJitter: 밝기·대비·채도를 무작위로 흔들어 색/조명 단서에 못 기대게
+    - RandomErasing: 이미지 한 조각을 무작위로 지워 배경 일부에 못 기대게
+      (픽셀이 아니라 텐서를 지우므로 ToTensor/Normalize 뒤에 와야 한다)
     """
     if train:
         return transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3),
             transforms.ToTensor(),
             transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),
+            transforms.RandomErasing(p=0.5, scale=(0.02, 0.2)),
         ])
     return transforms.Compose([
         transforms.Resize(256),
