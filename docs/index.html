@@ -116,6 +116,14 @@ logger.log(train_loss=0.5, train_acc=0.8, test_acc=0.7)  # 에폭마다</code>
     </div>
   </section>
 
+  <section class="card" id="final-card" hidden>
+    <div class="card-head">
+      <h2>추론 시점 결과 — 학습 곡선 밖의 최종 시스템</h2>
+      <span style="font-size:12px;color:var(--ink-muted)">TTA·앙상블은 학습이 아니라서 에폭 곡선이 없음 · 재현: <code style="font-size:11px">scripts/two_view_ensemble.py --tta</code></span>
+    </div>
+    <div class="plot" style="height:200px"><canvas id="final-chart" role="img" aria-label="추론 시점 시스템별 테스트 정확도 막대 그래프"></canvas></div>
+  </section>
+
   <section class="card">
     <h2>실험 요약</h2>
     <div style="overflow-x:auto">
@@ -142,8 +150,8 @@ logger.log(train_loss=0.5, train_acc=0.8, test_acc=0.7)  # 에폭마다</code>
   const DARK  = ['#3987e5','#199e70','#c98500','#008300','#9085e9','#e66767','#d55181','#d95926'];
   const darkMq = window.matchMedia('(prefers-color-scheme: dark)');
 
-  const state = { runs: [], visible: new Set(), showTrain: false };
-  let accChart = null, lossChart = null;
+  const state = { runs: [], visible: new Set(), showTrain: false, final: null };
+  let accChart = null, lossChart = null, finalChart = null;
 
   const css = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   const palette = () => (darkMq.matches ? DARK : LIGHT);
@@ -167,6 +175,10 @@ logger.log(train_loss=0.5, train_acc=0.8, test_acc=0.7)  # 에폭마다</code>
     }
     state.runs = runs;
     runs.forEach((_, i) => state.visible.add(i));
+    try {
+      const r = await fetch('metrics/final_results.json', { cache: 'no-store' });
+      if (r.ok) state.final = await r.json();
+    } catch { /* 없으면 섹션 숨김 유지 */ }
   }
 
   // ── 80% 목표선 ──────────────────────────────────────────────
@@ -326,6 +338,109 @@ logger.log(train_loss=0.5, train_acc=0.8, test_acc=0.7)  # 에폭마다</code>
       options: lossOpts,
       plugins: [endLabels]
     });
+
+    buildFinalChart();
+  }
+
+  // ── 추론 시점 결과 (수평 막대 + 80% 세로 목표선 + 값 라벨) ──
+  const targetLineX = {
+    id: 'targetLineX',
+    afterDatasetsDraw(chart, _args, opts) {
+      if (!opts.value) return;
+      const { ctx, chartArea, scales } = chart;
+      const x = scales.x.getPixelForValue(opts.value);
+      if (x < chartArea.left || x > chartArea.right) return;
+      ctx.save();
+      ctx.strokeStyle = css('--goal-ink');
+      ctx.setLineDash([5, 4]);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = '11px system-ui, sans-serif';
+      ctx.fillStyle = css('--goal-ink');
+      ctx.textAlign = 'left';
+      ctx.fillText('목표 80%', x + 4, chartArea.top + 10);
+      ctx.restore();
+    }
+  };
+  const barValueLabels = {
+    id: 'barValueLabels',
+    afterDatasetsDraw(chart) {
+      const { ctx } = chart;
+      const meta = chart.getDatasetMeta(0);
+      ctx.save();
+      ctx.font = '600 11px system-ui, sans-serif';
+      ctx.fillStyle = css('--ink-1');
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      meta.data.forEach((bar, i) => {
+        const v = chart.data.datasets[0].data[i];
+        ctx.fillText(v.toFixed(2) + '%', bar.x + 6, bar.y);
+      });
+      ctx.restore();
+    }
+  };
+
+  function buildFinalChart() {
+    if (!state.final || !state.final.results || !state.final.results.length) return;
+    document.getElementById('final-card').hidden = false;
+    if (finalChart) finalChart.destroy();
+    const rows = state.final.results;
+    finalChart = new Chart(document.getElementById('final-chart'), {
+      type: 'bar',
+      data: {
+        labels: rows.map(r => r.name),
+        datasets: [{
+          data: rows.map(r => r.acc * 100),
+          backgroundColor: rows.map(r => r.final ? css('--goal-ink') : css('--baseline')),
+          borderRadius: 4,
+          barThickness: 20
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        layout: { padding: { right: 56 } },
+        plugins: {
+          legend: { display: false },
+          targetLineX: { value: 80 },
+          tooltip: {
+            backgroundColor: css('--surface'),
+            titleColor: css('--ink-1'),
+            bodyColor: css('--ink-2'),
+            borderColor: css('--baseline'),
+            borderWidth: 1,
+            padding: 10,
+            callbacks: {
+              label: ctx => `${ctx.parsed.x.toFixed(2)}% · ${rows[ctx.dataIndex].detail || ''}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            min: 0, max: 100,
+            title: { display: true, text: '테스트 정확도 (%)', color: css('--ink-muted'), font: { size: 11 } },
+            grid: { color: css('--grid') },
+            border: { display: false },
+            ticks: { color: css('--ink-muted'), font: { size: 11 } }
+          },
+          y: {
+            grid: { display: false },
+            border: { color: css('--baseline') },
+            ticks: { color: css('--ink-2'), font: { size: 12 } }
+          }
+        }
+      },
+      plugins: [targetLineX, barValueLabels]
+    });
+    // hidden 카드 안에서 생성되면 캔버스가 0폭으로 잡히는 경우가 있어
+    // 레이아웃 확정 후 한 번 크기를 다시 계산한다.
+    requestAnimationFrame(() => finalChart && finalChart.resize());
   }
 
   function renderList() {

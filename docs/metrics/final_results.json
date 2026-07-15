@@ -1,0 +1,9 @@
+{
+  "note": "학습 곡선이 없는 추론 시점 결과 (TTA/앙상블). 재현: scripts/two_view_ensemble.py --tta",
+  "results": [
+    { "name": "exp05 사람 시야 단독", "acc": 0.7079, "detail": "person-crop, 추론 1회" },
+    { "name": "exp04 전체 시야 (단일 crop)", "acc": 0.7580, "detail": "평소 평가, 추론 1회" },
+    { "name": "exp04 + 5-crop TTA", "acc": 0.7777, "detail": "추론 5회" },
+    { "name": "최종: 사람 0.3 + 전체 TTA 0.7", "acc": 0.8071, "detail": "두-시야 앙상블, 추론 6회", "final": true }
+  ]
+}
