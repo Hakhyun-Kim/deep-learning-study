@@ -83,23 +83,20 @@ def main() -> None:
     model.load_state_dict(torch.load(ckpt, map_location=device))
     model.eval()
 
-    correct = torch.zeros(5, dtype=torch.long)  # 위치별 맞힌 수
-    correct_tta = 0                             # 5-crop 평균(TTA)으로 맞힌 수
-    seen = 0
+    all_probs, all_labels = [], []
     with torch.no_grad():
         for crops, labels in loader:            # crops: (B, 5, 3, 224, 224)
             b = labels.size(0)
             flat = crops.view(-1, *crops.shape[2:]).to(device)  # (B*5, 3, 224, 224)
-            probs = model(flat).softmax(dim=1).view(b, 5, -1).cpu()  # (B, 5, 40)
-            # 위치별 단독 예측
-            preds = probs.argmax(dim=2)                        # (B, 5)
-            correct += (preds == labels[:, None]).sum(dim=0)
-            # 다섯 위치 확률 평균 → TTA 예측
-            correct_tta += (probs.mean(dim=1).argmax(dim=1) == labels).sum().item()
-            seen += b
+            all_probs.append(model(flat).softmax(dim=1).view(b, 5, -1).cpu())
+            all_labels.append(labels)
+    probs = torch.cat(all_probs)                # (N, 5, 40)
+    labels = torch.cat(all_labels)              # (N,)
+    seen = labels.size(0)
 
     print(f"\n=== {args.name} — 위치 민감도 (test {seen}장, FiveCrop) ===")
     print("[위치별 단독 정확도]  (평소 평가 = '중앙'과 동일)")
+    correct = (probs.argmax(dim=2) == labels[:, None]).sum(dim=0)  # 위치별
     for name, c in zip(POSITIONS, correct.tolist()):
         bar = "#" * round(c / seen * 50)
         print(f"  {name:6s} {c / seen * 100:5.2f}%  {bar}")
@@ -107,7 +104,23 @@ def main() -> None:
     center = correct[4].item() / seen
     print(f"\n  모서리 평균 {corner_avg * 100:.2f}% vs 중앙 {center * 100:.2f}% "
           f"(격차 {(center - corner_avg) * 100:+.2f}%p)")
-    print(f"  5-crop 평균(TTA): {correct_tta / seen * 100:.2f}%")
+
+    # "중앙을 얼마나 더 믿어야 하나" 스윕:
+    #   최종 확률 = w * 중앙 + (1-w) * 모서리 평균.
+    #   w=1.0 이면 평소 평가(중앙만), w=0.2 이면 균등 평균(=보통의 TTA).
+    print("\n[중앙 가중치 스윕]  w * 중앙 + (1-w) * 모서리평균")
+    corners_mean = probs[:, :4].mean(dim=1)     # (N, 40)
+    center_p = probs[:, 4]                      # (N, 40)
+    best_w, best_acc = 0.0, 0.0
+    for w10 in range(0, 11):
+        w = w10 / 10
+        mixed = w * center_p + (1 - w) * corners_mean
+        acc = (mixed.argmax(dim=1) == labels).float().mean().item()
+        tag = {0.2: " ← 균등 평균(TTA)", 1.0: " ← 평소 평가(중앙만)"}.get(w, "")
+        print(f"  w={w:.1f}  {acc * 100:5.2f}%{tag}")
+        if acc > best_acc:
+            best_w, best_acc = w, acc
+    print(f"\n  최적: w={best_w:.1f} → {best_acc * 100:.2f}%")
 
 
 if __name__ == "__main__":
