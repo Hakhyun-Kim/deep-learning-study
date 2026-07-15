@@ -180,8 +180,8 @@ phoning→smoking 31회). 상징적 사례로, exp02가 벽 글씨를 근거로 
 [2] G. Gkioxari, R. Girshick, J. Malik, "Contextual Action Recognition with
 R\*CNN," *ICCV*, 2015. [arXiv:1505.01197](https://arxiv.org/abs/1505.01197)
 
-[3] S. H. Noorbakhsh et al., "Human Action Recognition in Still Images Using
-ConViT," 2023. [arXiv:2307.08994](https://arxiv.org/abs/2307.08994)
+[3] "Human Action Recognition in Still Images Using ConViT," 2023.
+[arXiv:2307.08994](https://arxiv.org/abs/2307.08994)
 
 [4] R. Geirhos et al., "Shortcut Learning in Deep Neural Networks,"
 *Nature Machine Intelligence*, 2020.
